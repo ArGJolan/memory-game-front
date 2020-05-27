@@ -1,0 +1,4 @@
+apiVersion: v2
+description: Memory Game Front
+name: memory-game-front
+version: 1.0.0

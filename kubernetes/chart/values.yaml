@@ -1,0 +1,26 @@
+name: memory-game-front
+
+subdomain: memory-game
+domainPath: /
+
+image:
+  registry: registry.argjolan.ovh
+  tag: latest
+
+imagePullSecretsName: argjolan-registry-credentials
+
+tls: true
+auth: true
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 100m
+    memory: 64Mi
+
+servicePort: 80
+serviceLabels: []
+
+ingressAnnotations: []
