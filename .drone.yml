@@ -34,7 +34,7 @@ steps:
       event:
       - push
 
-  - name: Build & Publish
+  - name: Build & Publish feature
     image: banzaicloud/drone-kaniko
     settings:
       registry:
