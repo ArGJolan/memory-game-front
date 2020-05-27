@@ -3,9 +3,11 @@ module.exports = {
     // add more generic rulesets here, such as:
     'eslint:recommended',
     'plugin:vue/recommended',
-    'standard'
+    'standard',
   ],
   rules: {
-    'vue/no-unused-vars': 'warning'
-  }
-}
+    'vue/no-unused-vars': 1,
+    semi: ['error', 'always'],
+    'comma-dangle': ['error', 'always-multiline'],
+  },
+};

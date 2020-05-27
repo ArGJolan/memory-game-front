@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import Picker from './Picker.vue'
-import Card from './Card.vue'
+import Picker from './Picker.vue';
+import Card from './Card.vue';
 
 export default {
   name: 'Board',
@@ -34,8 +34,8 @@ export default {
     return {
       possibleCardCounts: [4, 8, 12],
       selectedCardCount: 4,
-      cards: []
-    }
+      cards: [],
+    };
   },
   mounted () {
     if (this.selectedCardCount) {
@@ -48,7 +48,7 @@ export default {
       this.initGame();
     },
     initGame () {
-      this.playing = false
+      this.playing = false;
 
       this.cards = new Array(this.selectedCardCount).fill(0).map((_, index) => ({
         value: Math.floor(Math.random() * 100),
@@ -58,9 +58,10 @@ export default {
     },
     flip (card) {
       card.flipped = !card.flipped;
+      card.flippable = false;
     },
   },
-}
+};
 </script>
 
 <style>
