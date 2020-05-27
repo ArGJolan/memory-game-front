@@ -1,7 +1,7 @@
 domain: argjolan.ovh
 
 image:
-  tag: latest # Not a huge fan of that
+  tag: feature
 
 resources:
   requests:
