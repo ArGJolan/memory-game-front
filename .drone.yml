@@ -16,6 +16,9 @@ steps:
     commands:
     - npm install
     - npm run test
+    when:
+      event:
+      - push
 
   ####################################################
   ####################################################
@@ -122,7 +125,7 @@ steps:
         from_secret: PROD_API_SERVER
       kubernetes_token:
         from_secret: PROD_KUBERNETES_TOKEN
-      namespace: develop
+      namespace: feature
       debug: true
     when:
       branch:
