@@ -20,7 +20,8 @@
       />
       <GameControls
         :game-state="gameState"
-        @start="initGame"
+        @start="startGame"
+        @reset="resetGame"
       />
     </template>
   </div>
@@ -49,16 +50,38 @@ export default {
   methods: {
     setCardCount (cardCount) {
       this.selectedCardCount = cardCount;
-      this.initGame();
+      this.resetGame();
     },
-    initGame () {
-      this.playing = false;
+    // TO REFACTOR WHEN IMPLEMENTING BACKEND
+    generateValues (count) {
+      const values = [];
 
-      this.cards = new Array(this.selectedCardCount).fill(0).map((_, index) => ({
-        value: Math.floor(Math.random() * 100),
-        flipped: index % 2 === 0,
-        flippable: index % 2 === 0,
+      while (values.length !== count) {
+        const newValue = Math.floor(Math.random() * 100);
+
+        if (!values.includes(newValue)) {
+          values.push(newValue);
+        }
+      }
+
+      return values;
+    },
+    resetGame () {
+      this.gameState = 'init';
+
+      const values = this.generateValues(this.selectedCardCount);
+      this.cards = values.map((value, index) => ({
+        value,
+        flipped: false,
+        flippable: false,
       }));
+    },
+    startGame () {
+      for (let i = 0; i < this.cards.length; i++) {
+        this.cards[i].flipped = true;
+        this.cards[i].flippable = true;
+      }
+      this.gameState = 'running';
     },
     flip (card) {
       card.flipped = !card.flipped;
