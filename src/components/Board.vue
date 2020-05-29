@@ -33,14 +33,9 @@ export default {
   data () {
     return {
       possibleCardCounts: [4, 8, 12],
-      selectedCardCount: 4,
+      selectedCardCount: 0,
       cards: [],
     };
-  },
-  mounted () {
-    if (this.selectedCardCount) {
-      this.initGame();
-    }
   },
   methods: {
     setCardCount (cardCount) {

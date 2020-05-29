@@ -5,6 +5,9 @@ module.exports = {
     'plugin:vue/recommended',
     'standard',
   ],
+  env: {
+    mocha: true,
+  },
   rules: {
     'vue/no-unused-vars': 1,
     semi: ['error', 'always'],

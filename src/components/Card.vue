@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: 'Board',
+  name: 'Card',
   props: {
     value: {
       type: Number,

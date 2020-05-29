@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'Board',
+  name: 'Picker',
   props: {
     cardCount: {
       type: Number,
