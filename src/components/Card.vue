@@ -1,7 +1,7 @@
 <template>
   <div
     class="card"
-    :class="{ flippable }"
+    :class="{ flippable, [`background-${background}`]: background }"
     @click="flip"
   >
     <div
@@ -34,6 +34,10 @@ export default {
     flippable: {
       type: Boolean,
       required: true,
+    },
+    background: {
+      type: String,
+      default: null,
     },
   },
   methods: {
@@ -72,5 +76,13 @@ export default {
 
 .card-face.back {
   background: beige;
+}
+
+.card.background-green {
+  box-shadow: 3px 3px 3px 3px rgba(0, 255, 0, 0.3);
+}
+
+.card.background-red {
+  box-shadow: 3px 3px 3px 3px rgba(255, 0, 0, 0.3);
 }
 </style>

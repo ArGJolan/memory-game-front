@@ -16,12 +16,16 @@
         :value="card.value"
         :flipped="card.flipped"
         :flippable="card.flippable"
+        :background="card.background"
         @flip="flip(card)"
       />
       <GameControls
         :game-state="gameState"
         @start="startGame"
         @reset="resetGame"
+      />
+      <GameAnnouncer
+        :game-state="gameState"
       />
     </template>
   </div>
@@ -31,6 +35,7 @@
 import Picker from './Picker.vue';
 import Card from './Card.vue';
 import GameControls from './GameControls.vue';
+import GameAnnouncer from './GameAnnouncer.vue';
 
 export default {
   name: 'Board',
@@ -38,6 +43,7 @@ export default {
     Picker,
     Card,
     GameControls,
+    GameAnnouncer,
   },
   data () {
     return {
@@ -45,6 +51,7 @@ export default {
       possibleCardCounts: [4, 8, 12],
       selectedCardCount: 0,
       cards: [],
+      expectedCards: [],
     };
   },
   methods: {
@@ -70,6 +77,17 @@ export default {
       this.gameState = 'init';
 
       const values = this.generateValues(this.selectedCardCount);
+      this.expectedCards = [...values];
+      this.expectedCards.sort((a, b) => {
+        // Could use ternary but not the most beautiful
+        if (a < b) {
+          return -1;
+        }
+        if (a > b) {
+          return 1;
+        }
+        return 0;
+      });
       this.cards = values.map((value, index) => ({
         value,
         flipped: false,
@@ -83,9 +101,31 @@ export default {
       }
       this.gameState = 'running';
     },
+    lose () {
+      for (let i = 0; i < this.cards.length; i++) {
+        this.cards[i].flipped = false;
+        this.cards[i].flippable = false;
+      }
+      this.gameState = 'lost';
+    },
+    win () {
+      this.gameState = 'won';
+    },
     flip (card) {
       card.flipped = !card.flipped;
       card.flippable = false;
+
+      const expectedCard = this.expectedCards.shift();
+      if (card.value === expectedCard) {
+        card.background = 'green';
+      } else {
+        card.background = 'red';
+        return this.lose();
+      }
+
+      if (!this.expectedCards.length) {
+        this.win();
+      }
     },
   },
 };

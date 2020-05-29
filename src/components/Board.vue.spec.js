@@ -3,6 +3,7 @@
 import Board from './Board';
 import Card from './Card';
 import GameControls from './GameControls';
+import GameAnnouncer from './GameAnnouncer';
 import Picker from './Picker';
 import { mount } from '@vue/test-utils';
 import { expect } from 'chai';
@@ -20,6 +21,10 @@ describe('Board', () => {
 
   it('should not have a GameControls on mount', () => {
     expect(board.findComponent(GameControls).exists()).to.be.false;
+  });
+
+  it('should not have a GameAnnouncer on mount', () => {
+    expect(board.findComponent(GameAnnouncer).exists()).to.be.false;
   });
 
   it('should have 3 Pickers on mount', () => {
@@ -48,7 +53,11 @@ describe('Board', () => {
     });
 
     it('should have a GameControls', () => {
-      expect(board.findComponent(Card).exists()).to.be.true;
+      expect(board.findComponent(GameControls).exists()).to.be.true;
+    });
+
+    it('should have a GameAnnouncer', () => {
+      expect(board.findComponent(GameAnnouncer).exists()).to.be.true;
     });
   });
 });
