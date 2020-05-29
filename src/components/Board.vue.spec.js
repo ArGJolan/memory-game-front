@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
 
 import Board from './Board';
