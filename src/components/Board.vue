@@ -88,7 +88,7 @@ export default {
         }
         return 0;
       });
-      this.cards = values.map((value, index) => ({
+      this.cards = values.map((value) => ({
         value,
         flipped: false,
         flippable: false,
