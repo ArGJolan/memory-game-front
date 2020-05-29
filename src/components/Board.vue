@@ -8,30 +8,39 @@
       :selected-card-count="selectedCardCount"
       @pick="setCardCount(cardCount)"
     />
-    <p>Board</p>
-    <Card
-      v-for="(card, index) of cards"
-      :key="`card-${index}`"
-      :value="card.value"
-      :flipped="card.flipped"
-      :flippable="card.flippable"
-      @flip="flip(card)"
-    />
+    <template v-if="cards && cards.length">
+      <p>Board</p>
+      <Card
+        v-for="(card, index) of cards"
+        :key="`card-${index}`"
+        :value="card.value"
+        :flipped="card.flipped"
+        :flippable="card.flippable"
+        @flip="flip(card)"
+      />
+      <GameControls
+        :game-state="gameState"
+        @start="initGame"
+      />
+    </template>
   </div>
 </template>
 
 <script>
 import Picker from './Picker.vue';
 import Card from './Card.vue';
+import GameControls from './GameControls.vue';
 
 export default {
   name: 'Board',
   components: {
     Picker,
     Card,
+    GameControls,
   },
   data () {
     return {
+      gameState: 'init',
       possibleCardCounts: [4, 8, 12],
       selectedCardCount: 0,
       cards: [],
