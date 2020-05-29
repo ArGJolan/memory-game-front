@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: "{{ .Values.name }}-ingress"
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+{{- if .Values.tls }}
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+{{- end }}
+{{- if .Values.auth }}
+    nginx.ingress.kubernetes.io/auth-url: "https://permissions.{{ .Values.domain }}/check/"
+    nginx.ingress.kubernetes.io/auth-signin: "https://sso.{{ .Values.domain }}/"
+    nginx.ingress.kubernetes.io/auth-snippet: |
+      proxy_set_header              Content-Length "";
+      proxy_set_header              X-Original-URI $request_uri;
+      proxy_set_header              X-Original-Server-Name $server_name;
+{{- end }}
+spec:
+{{- if .Values.tls }}
+  tls:
+  - hosts:
+    - "{{ .Values.subdomain }}.{{ .Values.domain }}"
+    secretName: "{{ .Values.subdomain }}-{{ .Values.domain }}-tls"
+{{- end }}
+  rules:
+  - host: "{{ .Values.subdomain }}.{{ .Values.domain }}"
+    http:
+      paths:
+      - path: {{ .Values.domainPath }}
+        backend:
+          serviceName: {{ .Values.name }}
+          servicePort: {{ .Values.servicePort }}
