@@ -60,4 +60,6 @@ describe('Board', () => {
       expect(board.findComponent(GameAnnouncer).exists()).to.be.true;
     });
   });
+
+  // NOTE: should do tests about the most important game mechanic (picking the right card)
 });
