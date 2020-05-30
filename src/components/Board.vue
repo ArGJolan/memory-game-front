@@ -36,6 +36,7 @@ import Picker from './Picker.vue';
 import Card from './Card.vue';
 import GameControls from './GameControls.vue';
 import GameAnnouncer from './GameAnnouncer.vue';
+import axios from 'axios';
 
 export default {
   name: 'Board',
@@ -60,7 +61,7 @@ export default {
       this.resetGame();
     },
     async generateValues (count) {
-      const { data: { result } } = await window.axios(`${process.env.VUE_APP_API_URL}/random/${count}`);
+      const { data: { result } } = await axios(`${process.env.VUE_APP_API_URL}/random/${count}`);
 
       return result;
     },
