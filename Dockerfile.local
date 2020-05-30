@@ -1,12 +1,11 @@
 # build stage
 FROM node:12.16.1-alpine as build-stage
 
-ENV NODE_ENV=development
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+RUN npm run build -- --mode development
 
 # production stage
 FROM nginx:stable-alpine as production-stage
