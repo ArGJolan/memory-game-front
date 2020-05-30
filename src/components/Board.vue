@@ -8,6 +8,12 @@
       :selected-card-count="selectedCardCount"
       @pick="setCardCount(cardCount)"
     />
+    <p
+      v-if="error"
+      class="error"
+    >
+      {{ error }}
+    </p>
     <template v-if="cards && cards.length">
       <p>Board</p>
       <Card
@@ -48,6 +54,7 @@ export default {
   },
   data () {
     return {
+      error: null,
       gameState: 'init',
       possibleCardCounts: [4, 8, 12],
       selectedCardCount: 0,
@@ -70,6 +77,7 @@ export default {
 
       let values;
       try {
+        this.error = null;
         values = await this.generateValues(this.selectedCardCount);
       } catch (err) {
         this.error = err.message || err;
@@ -131,5 +139,7 @@ export default {
 </script>
 
 <style>
-
+p.error {
+  color: red;
+}
 </style>

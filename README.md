@@ -1,29 +1,19 @@
-# memory-game-front
+# Memory game front
 
-## Project setup
+## Build & Run
+
+Your app will be available at [http://localhost:8080](http://localhost:8080)
+
+### With node
 
 ```shell
 npm install
-```
-
-### Compiles and hot-reloads for development
-
-```shell
 npm run serve
 ```
 
-### Compiles and minifies for production
+### With Docker
 
 ```shell
-npm run build
+docker build -t memory-game-front . -f Dockerfile.local
+docker run -d --name memory-game-front -p 8080:80 memory-game-front
 ```
-
-### Lints and fixes files
-
-```shell
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
