@@ -4,27 +4,17 @@
   >
     <button
       v-if="gameState === 'init'"
+      class="start"
       @click="startGame"
     >
       Start
     </button>
     <button
-      v-if="gameState === 'running'"
+      v-if="resetGameMessage"
+      class="reset"
       @click="resetGame"
     >
-      Reset
-    </button>
-    <button
-      v-if="gameState === 'won'"
-      @click="resetGame"
-    >
-      Play Again!
-    </button>
-    <button
-      v-if="gameState === 'lost'"
-      @click="resetGame"
-    >
-      Try Again!
+      {{ resetGameMessage }}
     </button>
   </div>
 </template>
@@ -38,7 +28,17 @@ export default {
       required: true,
     },
   },
+  computed: {
+    resetGameMessage () {
+      const messages = {
+        running: 'Reset',
+        won: 'Play Again!',
+        lost: 'Try Again!',
+      };
 
+      return messages[this.gameState];
+    },
+  },
   methods: {
     startGame () {
       this.$emit('start');
