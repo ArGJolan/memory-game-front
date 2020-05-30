@@ -53,7 +53,7 @@ export default {
 <style>
 .card {
   border: 1px black solid;
-  border-radius: 4px;
+  border-radius: 7px;
   width: 60px;
   height: 90px;
   margin: 4px;
@@ -65,6 +65,7 @@ export default {
 }
 
 .card-face {
+  border-radius: 7px;
   width: 100%;
   height: 100%;
   display: block;
