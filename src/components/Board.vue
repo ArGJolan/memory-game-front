@@ -8,52 +8,124 @@
       :selected-card-count="selectedCardCount"
       @pick="setCardCount(cardCount)"
     />
-    <p>Board</p>
-    <Card
-      v-for="(card, index) of cards"
-      :key="`card-${index}`"
-      :value="card.value"
-      :flipped="card.flipped"
-      :flippable="card.flippable"
-      @flip="flip(card)"
-    />
+    <template v-if="cards && cards.length">
+      <p>Board</p>
+      <Card
+        v-for="(card, index) of cards"
+        :key="`card-${index}`"
+        :value="card.value"
+        :flipped="card.flipped"
+        :flippable="card.flippable"
+        :background="card.background"
+        @flip="flip(card)"
+      />
+      <GameControls
+        :game-state="gameState"
+        @start="startGame"
+        @reset="resetGame"
+      />
+      <GameAnnouncer
+        :game-state="gameState"
+      />
+    </template>
   </div>
 </template>
 
 <script>
 import Picker from './Picker.vue';
 import Card from './Card.vue';
+import GameControls from './GameControls.vue';
+import GameAnnouncer from './GameAnnouncer.vue';
 
 export default {
   name: 'Board',
   components: {
     Picker,
     Card,
+    GameControls,
+    GameAnnouncer,
   },
   data () {
     return {
+      gameState: 'init',
       possibleCardCounts: [4, 8, 12],
       selectedCardCount: 0,
       cards: [],
+      expectedCards: [],
     };
   },
   methods: {
     setCardCount (cardCount) {
       this.selectedCardCount = cardCount;
-      this.initGame();
+      this.resetGame();
     },
-    initGame () {
-      this.playing = false;
+    // TO REFACTOR WHEN IMPLEMENTING BACKEND
+    generateValues (count) {
+      const values = [];
 
-      this.cards = new Array(this.selectedCardCount).fill(0).map((_, index) => ({
-        value: Math.floor(Math.random() * 100),
-        flipped: index % 2 === 0,
-        flippable: index % 2 === 0,
+      while (values.length !== count) {
+        const newValue = Math.floor(Math.random() * 100);
+
+        if (!values.includes(newValue)) {
+          values.push(newValue);
+        }
+      }
+
+      return values;
+    },
+    resetGame () {
+      this.gameState = 'init';
+
+      const values = this.generateValues(this.selectedCardCount);
+      this.expectedCards = [...values];
+      this.expectedCards.sort((a, b) => {
+        // Could use ternary but not the most beautiful
+        if (a < b) {
+          return -1;
+        }
+        if (a > b) {
+          return 1;
+        }
+        return 0;
+      });
+      this.cards = values.map((value) => ({
+        value,
+        flipped: false,
+        flippable: false,
       }));
+    },
+    startGame () {
+      for (let i = 0; i < this.cards.length; i++) {
+        this.cards[i].flipped = true;
+        this.cards[i].flippable = true;
+      }
+      this.gameState = 'running';
+    },
+    lose () {
+      for (let i = 0; i < this.cards.length; i++) {
+        this.cards[i].flipped = false;
+        this.cards[i].flippable = false;
+      }
+      this.gameState = 'lost';
+    },
+    win () {
+      this.gameState = 'won';
     },
     flip (card) {
       card.flipped = !card.flipped;
       card.flippable = false;
+
+      const expectedCard = this.expectedCards.shift();
+      if (card.value === expectedCard) {
+        card.background = 'green';
+      } else {
+        card.background = 'red';
+        return this.lose();
+      }
+
+      if (!this.expectedCards.length) {
+        this.win();
+      }
     },
   },
 };
