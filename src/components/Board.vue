@@ -8,6 +8,12 @@
       :selected-card-count="selectedCardCount"
       @pick="setCardCount(cardCount)"
     />
+    <p
+      v-if="error"
+      class="error"
+    >
+      {{ error }}
+    </p>
     <template v-if="cards && cards.length">
       <p>Board</p>
       <Card
@@ -36,6 +42,7 @@ import Picker from './Picker.vue';
 import Card from './Card.vue';
 import GameControls from './GameControls.vue';
 import GameAnnouncer from './GameAnnouncer.vue';
+import axios from 'axios';
 
 export default {
   name: 'Board',
@@ -47,6 +54,7 @@ export default {
   },
   data () {
     return {
+      error: null,
       gameState: 'init',
       possibleCardCounts: [4, 8, 12],
       selectedCardCount: 0,
@@ -59,24 +67,23 @@ export default {
       this.selectedCardCount = cardCount;
       this.resetGame();
     },
-    // TO REFACTOR WHEN IMPLEMENTING BACKEND
-    generateValues (count) {
-      const values = [];
+    async generateValues (count) {
+      const { data: { result } } = await axios(`${process.env.VUE_APP_API_URL}/random/${count}`);
 
-      while (values.length !== count) {
-        const newValue = Math.floor(Math.random() * 100);
-
-        if (!values.includes(newValue)) {
-          values.push(newValue);
-        }
-      }
-
-      return values;
+      return result;
     },
-    resetGame () {
+    async resetGame () {
       this.gameState = 'init';
 
-      const values = this.generateValues(this.selectedCardCount);
+      let values;
+      try {
+        this.error = null;
+        values = await this.generateValues(this.selectedCardCount);
+      } catch (err) {
+        this.error = err.message || err;
+        this.selectedCardCount = 0;
+        return;
+      }
       this.expectedCards = [...values];
       this.expectedCards.sort((a, b) => {
         // Could use ternary but not the most beautiful
@@ -132,5 +139,7 @@ export default {
 </script>
 
 <style>
-
+p.error {
+  color: red;
+}
 </style>

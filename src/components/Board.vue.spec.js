@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-expressions */
 
+import moxios from 'moxios';
 import Board from './Board';
 import Card from './Card';
 import GameControls from './GameControls';
@@ -12,7 +13,12 @@ describe('Board', () => {
   let board;
 
   beforeEach(() => {
+    moxios.install();
     board = mount(Board);
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
   });
 
   it('should not have Cards on mount', () => {
@@ -33,6 +39,11 @@ describe('Board', () => {
   });
 
   it('should have 4 cards when Picker 4 is clicked', async () => {
+    moxios.stubRequest(/\/random\/4/, {
+      status: 200,
+      responseText: { result: [4, 72, 42, 12] },
+    });
+
     const fourPicker = board.findAllComponents(Picker).wrappers.find(wrapper => wrapper.props().cardCount === 4);
     fourPicker.find('div').trigger('click');
 
@@ -44,6 +55,11 @@ describe('Board', () => {
 
   describe('with Cards', () => {
     beforeEach(async () => {
+      moxios.stubRequest(/\/random\/.*/, {
+        status: 200,
+        responseText: { result: [4, 72, 42, 12] },
+      });
+
       const picker = board.findAllComponents(Picker).wrappers[0];
       picker.find('div').trigger('click');
 

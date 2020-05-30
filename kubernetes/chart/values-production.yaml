@@ -3,6 +3,8 @@ domain: argjolan.com
 image:
   tag: master
 
+auth: false
+
 resources:
   requests:
     cpu: 10m
